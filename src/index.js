@@ -13,43 +13,43 @@ const DEBOUNCE_DELAY = 300;
 
 function inputNameCountry(event) {
   const nameCountries = event.target.value.trim();
-  if (nameCountries === '') {
-    return clearDocument();
+  updateDocument();
+  if (!nameCountries) {
+    return;
   }
 
   fetchCountriesByName(nameCountries).then(createCardList).catch(reject);
 }
 
-function clearDocument() {
-  refs.div.innerHTML = '';
-  refs.list.innerHTML = '';
+function updateDocument(mar1 = '', mar2 = '') {
+  refs.div.innerHTML = mar1;
+  refs.list.innerHTML = mar2;
 }
 
 function createCardList(arrCountries) {
   if (arrCountries.length > 10) {
     Notify.info('Too many matches found. Please enter a more specific name.');
   } else if (arrCountries.length >= 2 && arrCountries.length <= 10) {
-    clearDocument();
-    renderCountriesList(arrCountries);
+    const markup = renderCountriesList(arrCountries);
+    updateDocument('', markup);
   } else {
-    clearDocument();
-    renderCountryCard(arrCountries);
+    const markup = renderCountryCard(arrCountries);
+    updateDocument(markup);
   }
 }
 
-function renderCountriesList(countries) {
-  const markup = countries
+function renderCountriesList(countries = []) {
+  return (markup = countries
     .map(country => {
       return `<li>
       <div class="box"><img src="${country.flags.svg}" alt="flag ${country.name.common}" /><h2>${country.name.common}</h2></div>
     </li>`;
     })
-    .join('');
-  refs.list.innerHTML = markup;
+    .join(''));
 }
 
-function renderCountryCard(countries) {
-  const markup = countries
+function renderCountryCard(countries = []) {
+  return (markup = countries
     .map(country => {
       return `<div class="box"><img class="flag" src="${country.flags.svg}" alt="flag ${
         country.name.common
@@ -59,8 +59,7 @@ function renderCountryCard(countries) {
               <p><span>Population</span>: ${country.population}</p>
               <p><span>Languages</span>: ${Object.values(country.languages).join(', ')}</p>`;
     })
-    .join('');
-  refs.div.innerHTML = markup;
+    .join(''));
 }
 
 function reject() {
