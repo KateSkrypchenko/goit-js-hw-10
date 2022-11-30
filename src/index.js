@@ -3,8 +3,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import debounce from 'lodash.debounce';
 import { fetchCountriesByName } from './fetchCountries';
 
-console.log('dfdfsd');
-
 const refs = {
   input: document.querySelector('#search-box'),
   list: document.querySelector('.country-list'),
